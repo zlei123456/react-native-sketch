@@ -96,23 +96,49 @@ def getComponentCode(elemKey, childrenCode, exData, space, elemsData):
                 res['render'] = layout.template.getButton(getElemName(elemKey + 'T'), res['render'], space)
 
         elif elemsData[elemKey]['type'] == 'Text':
-            str = elemsData[elemKey]['value']
+            elemStr = elemsData[elemKey]['value']
 
-            varName = getVarName(elemKey)
-            res['var'] += '    let {0}Text = \'{1}\';\n'.format(varName, str)
+            if ('fontLength' in elemsData[elemKey]['style']):
+                textChildRender = ''
+                index = 0
+                for fLen in elemsData[elemKey]['style']['fontLength']:
+                    str1 = elemStr[0:fLen]
+                    elemStr = elemStr[fLen: ]
 
-            elemAttrs = elemKey.split('-')
-            if('touch' in elemAttrs):
-                res['render'] = layout.template.getTouchText(getElemName(elemKey), exData['name'], varName + 'Text', space)
+                    varName = getVarName(elemKey)
+                    res['var'] += '    let {0}Text{2} = \'{1}\';\n'.format(varName, str1, index)
+
+                    elemAttrs = elemKey.split('-')
+                    if ('touch' in elemAttrs):
+                        textChildRender += layout.template.getTouchText(getElemName(elemKey) + '_T' + str(index), exData['name'],
+                                                                     varName + 'Text' + str(index), space)
+                    else:
+                        textChildRender += layout.template.getText(getElemName(elemKey) + '_T' + str(index), exData['name'], varName + 'Text' + str(index),
+                                                                space)
+
+                    index += 1
+
+                res['render'] = layout.template.getBaseText(getElemName(elemKey), exData['name'], textChildRender, space)
+
             else:
-                res['render'] = layout.template.getText(getElemName(elemKey), exData['name'], varName + 'Text', space)
+                varName = getVarName(elemKey)
+                res['var'] += '    let {0}Text = \'{1}\';\n'.format(varName, elemStr)
+
+                elemAttrs = elemKey.split('-')
+                if('touch' in elemAttrs):
+                    res['render'] = layout.template.getTouchText(getElemName(elemKey), exData['name'], varName + 'Text', space)
+                else:
+                    res['render'] = layout.template.getText(getElemName(elemKey), exData['name'], varName + 'Text', space)
 
 
     return res
 
 
 ignoreKey = [
-    'x', 'y'
+    'x', 'y', 'fontLength'
+]
+listTextKey = [
+    'color', 'fontSize', 'fontWeight'
 ]
 # 样式有关的
 # exData name
@@ -136,17 +162,58 @@ def getStyleFileBuf(layoutTree, elemsData, flexData, exData):
                 style[k1] = flexData[uId][k1]
 
 
-        for styleKey in style:
-            if styleKey in ignoreKey:
-                continue
-            v = style[styleKey]
-            vStr = getStyleLine(styleKey, v)
-            lineStr += '    {0}: {1},\n'.format(styleKey, vStr)
-
         if (elemsData[uId]['type'] == 'Text'):
             lineStr += '    {0}: {1},\n'.format('includeFontPadding', 'false')
+            if(type(style['color']) == type('')):
+                # 单个的
+                for styleKey in style:
+                    if styleKey in ignoreKey:
+                        continue
+                    v = style[styleKey]
+                    vStr = getStyleLine(styleKey, v)
+                    lineStr += '    {0}: {1},\n'.format(styleKey, vStr)
+                styleItems += '  {0}: {{\n{1}  }},\n'.format(getElemName(uId), lineStr)
 
-        styleItems += '  {0}: {{\n{1}  }},\n'.format(getElemName(uId), lineStr)
+            else:
+                styleLen = len(style['fontLength'])
+
+                for styleKey in style:
+                    if (not (styleKey in ignoreKey or styleKey in listTextKey)) and styleKey != 'height':
+                        v = style[styleKey]
+                        vStr = getStyleLine(styleKey, v)
+                        lineStr += '    {0}: {1},\n'.format(styleKey, vStr)
+                styleItems += '  {0}: {{\n{1}  }},\n'.format(getElemName(uId), lineStr)
+
+                for i in range(styleLen):
+                    lineStr = ''
+                    tStyle = {}
+
+                    for testStyleKey in listTextKey:
+                        tStyle[testStyleKey] = style[testStyleKey][i]
+                    tStyle['height'] = style['height']
+
+                    lineStr += '    {0}: {1},\n'.format('includeFontPadding', 'false')
+                    for styleKey in tStyle:
+                        v = tStyle[styleKey]
+                        vStr = getStyleLine(styleKey, v)
+                        lineStr += '    {0}: {1},\n'.format(styleKey, vStr)
+
+                    styleItems += '  {0}: {{\n{1}  }},\n'.format(getElemName(uId) + '_T' + str(i), lineStr)
+                    # if (i == 0):
+                    #     styleItems += '  {0}: {{\n{1}  }},\n'.format(getElemName(uId), lineStr)
+                    # else:
+                    #     styleItems += '  {0}: {{\n{1}  }},\n'.format(getElemName(uId) + '_T' + str(i), lineStr)
+
+
+        else:
+            for styleKey in style:
+                if styleKey in ignoreKey:
+                    continue
+                v = style[styleKey]
+                vStr = getStyleLine(styleKey, v)
+                lineStr += '    {0}: {1},\n'.format(styleKey, vStr)
+
+            styleItems += '  {0}: {{\n{1}  }},\n'.format(getElemName(uId), lineStr)
 
     if getattr(layout.ex.ex, 'getImportex', None):
         return layout.template.getStyleFile(exData['name'], styleItems, layout.ex.ex.getImportex())

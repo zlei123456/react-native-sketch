@@ -1,7 +1,7 @@
 
 /**
  * [exports description]
- * @author lei on 2019/8/28
+ * @author lei on 2019/8/30
  */
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -15,9 +15,11 @@ import { StylePage2 } from './StylePage2';
 
 class Page2 extends React.Component<any, any> {
     render() {
-    let IconAddoutLinear2Img = resMap.IconAddoutLinear2;
+    let IconAddoutLinear2Img = require('./icon_addout_linear2.png');
     let NameTouchText = '阿库娅';
     let TimeText = '18天前';
+    let RichTextText0 = '坏坏的闻西';
+    let RichTextText1 = '：同期待！';
     let T14Text = '14';
     let TxtText = '这个漫画简直不要太好看，完全停不下的节奏，希望接下来能出更多这类好看的作品！';
 
@@ -68,6 +70,21 @@ class Page2 extends React.Component<any, any> {
             	{TimeText}
             </Text>
             </View>
+          <Text style={StylePage2.richText}
+                key={'richText'}
+          >
+          	
+          <Text style={StylePage2.richText_T0}
+                key={'richText_T0'}
+          >
+          	{RichTextText0}
+          </Text>
+          <Text style={StylePage2.richText_T1}
+                key={'richText_T1'}
+          >
+          	{RichTextText1}
+          </Text>
+          </Text>
           <Text style={StylePage2.t14}
                 key={'t14'}
           >

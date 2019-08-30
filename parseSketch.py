@@ -213,22 +213,49 @@ def dealText(layerData, offPos):
 
     if (layerData['attributedString']):
         textData['value'] = layerData['attributedString']['string']
-        rStyle['color'] = utils.getColorStr(layerData['attributedString']['attributes'][0]['attributes']['MSAttributedStringColorAttribute'])
-        rStyle['fontSize'] = layerData['attributedString']['attributes'][0]['attributes']['MSAttributedStringFontAttribute']['attributes']['size']
-        fontFa = layerData['attributedString']['attributes'][0]['attributes']['MSAttributedStringFontAttribute']['attributes']['name']
+        if(len(layerData['attributedString']['attributes']) == 1):
+            rStyle['color'] = utils.getColorStr(layerData['attributedString']['attributes'][0]['attributes']['MSAttributedStringColorAttribute'])
+            rStyle['fontSize'] = layerData['attributedString']['attributes'][0]['attributes']['MSAttributedStringFontAttribute']['attributes']['size']
+            fontFa = layerData['attributedString']['attributes'][0]['attributes']['MSAttributedStringFontAttribute']['attributes']['name']
 
-        fontF = fontFa.split('-')
-        # rStyle['fontFamily'] = fontFa
-        if (len(fontF) > 1):
-            if(fontF[1] == 'Medium' or fontF[1] == 'Semibold'):
-                rStyle['fontWeight'] = 'bold'
+            fontF = fontFa.split('-')
+            # rStyle['fontFamily'] = fontFa
+            if (len(fontF) > 1):
+                if(fontF[1] == 'Medium' or fontF[1] == 'Semibold'):
+                    rStyle['fontWeight'] = 'bold'
 
 
-        # 计算新的行高
-        sLineHeight = math.floor(rStyle['fontSize'] * 1.4 + 0.5)
-        lineNum = math.floor(rStyle['height'] / sLineHeight + 0.5)
-        lineHeight = math.floor(rStyle['height'] / lineNum)
-        rStyle['lineHeight'] = lineHeight
+            # 计算新的行高
+            sLineHeight = math.floor(rStyle['fontSize'] * 1.4 + 0.5)
+            lineNum = math.floor(rStyle['height'] / sLineHeight + 0.5)
+            lineHeight = math.floor(rStyle['height'] / lineNum)
+            rStyle['lineHeight'] = lineHeight
+
+        else:
+            rStyle['color'] = []
+            rStyle['fontSize'] = []
+            rStyle['fontWeight'] = []
+            rStyle['fontLength'] = []
+            maxLineHeight = 0
+            for attr in layerData['attributedString']['attributes']:
+                rStyle['color'].append(utils.getColorStr(attr['attributes']['MSAttributedStringColorAttribute']))
+                rStyle['fontSize'].append(attr['attributes']['MSAttributedStringFontAttribute']['attributes']['size'])
+                fontFa = attr['attributes']['MSAttributedStringFontAttribute']['attributes']['name']
+                fontF = fontFa.split('-')
+                if (len(fontF) > 1 and (fontF[1] == 'Medium' or fontF[1] == 'Semibold')):
+                    rStyle['fontWeight'].append('blod')
+                else:
+                    rStyle['fontWeight'].append('normal')
+
+                # # 计算新的行高
+                # sLineHeight = math.floor(rStyle['fontSize'] * 1.4 + 0.5)
+                # lineNum = math.floor(rStyle['height'] / sLineHeight + 0.5)
+                # lineHeight = math.floor(rStyle['height'] / lineNum)
+                # if (maxLineHeight < lineHeight):
+                #     maxLineHeight = lineHeight
+
+                rStyle['fontLength'].append(attr['length'])
+
 
     textData['style'] = rStyle
     textData['type'] = 'Text'

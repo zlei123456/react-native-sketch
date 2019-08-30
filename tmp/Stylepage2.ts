@@ -1,7 +1,7 @@
 
 /**
  * [exports description]
- * @author lei on 2019/8/28
+ * @author lei on 2019/8/30
  */
 
 import {
@@ -32,6 +32,7 @@ export const StylePage2 = StyleSheet.create({
     top: getWidthOfPt(0),
   },
   name_touch: {
+    includeFontPadding: false,
     width: getWidthOfPt(39),
     height: getWidthOfPt(19),
     color: 'rgb(102, 102, 102)',
@@ -39,9 +40,9 @@ export const StylePage2 = StyleSheet.create({
     lineHeight: getWidthOfPt(18),
     marginTop: getWidthOfPt(0),
     left: getWidthOfPt(0),
-    includeFontPadding: false,
   },
   time: {
+    includeFontPadding: false,
     width: getWidthOfPt(34),
     height: getWidthOfPt(17),
     color: 'rgb(153, 153, 153)',
@@ -49,9 +50,9 @@ export const StylePage2 = StyleSheet.create({
     lineHeight: getWidthOfPt(16),
     marginTop: getWidthOfPt(0),
     left: getWidthOfPt(0),
-    includeFontPadding: false,
   },
   txt: {
+    includeFontPadding: false,
     width: getWidthOfPt(289),
     height: getWidthOfPt(43),
     color: 'rgb(51, 51, 51)',
@@ -59,7 +60,6 @@ export const StylePage2 = StyleSheet.create({
     lineHeight: getWidthOfPt(21),
     marginTop: getWidthOfPt(0),
     left: getWidthOfPt(46),
-    includeFontPadding: false,
   },
   icon_praise01: {
     width: getWidthOfPt(15),
@@ -67,13 +67,32 @@ export const StylePage2 = StyleSheet.create({
     marginLeft: getWidthOfPt(6),
   },
   t14: {
+    includeFontPadding: false,
     width: getWidthOfPt(15),
     height: getWidthOfPt(16),
     color: 'rgb(153, 153, 153)',
     fontSize: getFontSizeOfPt(13),
     lineHeight: getWidthOfPt(15),
-    marginLeft: getWidthOfPt(214),
+    marginLeft: getWidthOfPt(25),
+  },
+  richText: {
     includeFontPadding: false,
+    width: getWidthOfPt(140),
+    marginLeft: getWidthOfPt(49),
+  },
+  richText_T0: {
+    includeFontPadding: false,
+    color: 'rgb(98, 163, 228)',
+    fontSize: getFontSizeOfPt(14),
+    fontWeight: 'normal',
+    height: getWidthOfPt(27),
+  },
+  richText_T1: {
+    includeFontPadding: false,
+    color: 'rgb(51, 51, 51)',
+    fontSize: getFontSizeOfPt(14),
+    fontWeight: 'normal',
+    height: getWidthOfPt(27),
   },
   id_1: {
     width: getWidthOfPt(39),

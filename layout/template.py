@@ -145,6 +145,24 @@ def getImage(eId, name, children, cType, src, space):
 
     return conTempBuf
 
+template_BaseText = '''
+${space}<Text style={Style${name}.${eId}}
+${space}      key={'${eId}'}
+${space}>
+${space}\t${children}
+${space}</Text>'''
+
+def getBaseText(eId, name, children, space):
+    conTemp = string.Template(template_BaseText)
+    conTempBuf = conTemp.safe_substitute({
+        'eId': eId,
+        'name': name,
+        'children': children,
+        'space': space,
+    })
+
+    return conTempBuf
+
 template_Text = '''
 ${space}<Text style={Style${name}.${eId}}
 ${space}      key={'${eId}'}

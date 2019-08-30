@@ -17,17 +17,17 @@ def getImportex():
     return 'import { getFontSizeOfPt, getWidthOfPt } from \'../../../utils/utils\';'
 
 
-def getImageValue(imageName):
-    return 'resMap.' + exGetVarName(imageName)
-
-def exUpString(str):
-    return str[:1].upper() + str[1:]
-
-def exGetVarName(imageName):
-    a = imageName.split('.');
-    b = re.split('_|-', a[0])
-    ret = ''
-    for i in range(len(b)):
-        ret += exUpString(b[i])
-
-    return ret
+# def getImageValue(imageName):
+#     return 'resMap.' + exGetVarName(imageName)
+#
+# def exUpString(str):
+#     return str[:1].upper() + str[1:]
+#
+# def exGetVarName(imageName):
+#     a = imageName.split('.');
+#     b = re.split('_|-', a[0])
+#     ret = ''
+#     for i in range(len(b)):
+#         ret += exUpString(b[i])
+#
+#     return ret
